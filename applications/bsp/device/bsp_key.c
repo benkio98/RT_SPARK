@@ -72,5 +72,5 @@ int key_thread_init(void)
         return -RT_ERROR;
     }
 }
-INIT_APP_EXPORT(key_thread_init); // 使用自动初始化
+// INIT_APP_EXPORT(key_thread_init); // 使用自动初始化
  

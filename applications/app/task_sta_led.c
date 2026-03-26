@@ -44,4 +44,4 @@ int led_sta_thread_init(void)
     }
 }
 
-// INIT_APP_EXPORT(led_sta_thread_init); // 使用自动初始化
+INIT_APP_EXPORT(led_sta_thread_init); // 使用自动初始化

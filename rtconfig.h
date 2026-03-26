@@ -84,6 +84,8 @@
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_RTC
+#define RT_USING_ALARM
 
 /* Using USB */
 
@@ -305,6 +307,8 @@
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART1
+#define BSP_USING_ONCHIP_RTC
+#define BSP_RTC_USING_LSE
 /* end of On-chip Peripheral Drivers */
 
 /* Board extended module Drivers */
