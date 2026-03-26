@@ -8,9 +8,9 @@
  * 2026-03-26     laixiaobin   the first version
  */
 
-#define DBG_TAG "bsp_led"
-#define DBG_LVL         DBG_LOG
-#include <rtdbg.h>
+#define LOG_TAG "bsp_led"
+#define LOG_LVL         LOG_LVL_DBG
+#include <ulog.h>
 
 #include "bsp_led.h"
 #include <rtdevice.h>

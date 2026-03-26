@@ -55,7 +55,7 @@ void alarm_sample(void)
     }
 }
 /* export msh cmd */
-MSH_CMD_EXPORT(alarm_sample,alarm sample);
+// MSH_CMD_EXPORT(alarm_sample,alarm sample);
 
 ///\ cmd: set_datetime 2026 3 26 16 21 50
 void set_datetime(int argc, char **argv)
@@ -108,20 +108,20 @@ int rtc_init(void)
     }
 
     /* 设置日期 */
-    ret = set_date(2026, 3, 26);
-    if (ret != RT_EOK)
-    {
-        rt_kprintf("set RTC date failed\n");
-        return ret;
-    }
+    // ret = set_date(2026, 3, 26);
+    // if (ret != RT_EOK)
+    // {
+    //     rt_kprintf("set RTC date failed\n");
+    //     return ret;
+    // }
 
     /* 设置时间 */
-    ret = set_time(16, 21, 50);
-    if (ret != RT_EOK)
-    {
-        rt_kprintf("set RTC time failed\n");
-        return ret;
-    }
+    // ret = set_time(16, 21, 50);
+    // if (ret != RT_EOK)
+    // {
+    //     rt_kprintf("set RTC time failed\n");
+    //     return ret;
+    // }
 
     /* 获取时间 */
     now = time(RT_NULL);
