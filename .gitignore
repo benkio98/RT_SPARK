@@ -1,0 +1,117 @@
+# Compiled Object files
+*.o
+*.obj
+*.d
+*.i
+*.dep
+
+# Executables & Binaries
+*.elf
+*.bin
+*.hex
+*.axf
+*.out
+*.lib
+*.uimg
+
+# Build Map and Logs
+*.map
+*.pdb
+*.idb
+*.ilk
+
+# Build Directories
+build/
+Debug/
+Release/
+
+# RT-Thread Studio & Eclipse specific
+.metadata/
+.settings/
+*.launch
+
+# Keil MDK specific (if exported)
+*.uvguix*
+*.uvoptx
+DebugConfig/
+RTE/
+settings/
+Listings/
+Objects/
+
+# JLink & Debugger files
+JLinkLog.txt
+JLinkSettings.ini
+*.jlink
+
+# RT-Thread config backups & tools
+*.dblite
+.config 3
+.config 4
+.config 5
+.config.old
+GPATH
+GRTAGS
+GTAGS
+
+# OS & Temp files
+*~
+*.old
+*.bak
+.pyc
+.DS_Store
+.DS_Stor
+Thumbs.db
+
+# VS Code specific
+.vscode/
+.specstory/
+
+# packages/
+# libraries
+# rt-thread
+
+# *.pyc
+# *.map
+# *.dblite
+# *.elf
+# *.bin
+# *.hex
+# *.axf
+# *.exe
+# *.pdb
+# *.idb
+# *.ilk
+# *.old
+# build
+# Debug
+# documentation/html
+# packages/
+# *~
+# *.o
+# *.obj
+# *.out
+# *.bak
+# *.dep
+# *.lib
+# *.i
+# *.d
+# .DS_Stor*
+# .config 3
+# .config 4
+# .config 5
+# Midea-X1
+# *.uimg
+# GPATH
+# GRTAGS
+# GTAGS
+# .vscode
+# JLinkLog.txt
+# JLinkSettings.ini
+# DebugConfig/
+# RTE/
+# settings/
+# *.uvguix*
+# cconfig.h
+# libraries
+# rt-thread
