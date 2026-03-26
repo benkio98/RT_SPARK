@@ -22,7 +22,6 @@ static rt_thread_t led_sta_thread = RT_NULL; // 状态 LED 线程
 /* 状态 LED 闪烁任务线程 */
 static void led_sta_thread_entry(void *p)
 {
-    led_init(); // 初始化 LED
     while(1)
     {
         led_toggle();
@@ -45,4 +44,4 @@ int led_sta_thread_init(void)
     }
 }
 
-INIT_DEVICE_EXPORT(led_sta_thread_init); // 使用自动初始化
+// INIT_APP_EXPORT(led_sta_thread_init); // 使用自动初始化
