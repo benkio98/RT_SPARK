@@ -46,16 +46,16 @@ void app_lcd_clean(void)
     lcd_clear(WHITE);
 }
 
-// MSH_CMD_EXPORT(app_lcd_string, show string on LCD);
-// MSH_CMD_EXPORT(app_lcd_circle, show circle on LCD);
-// MSH_CMD_EXPORT(app_lcd_clean, clean LCD);
+MSH_CMD_EXPORT(app_lcd_string, show string on LCD);
+MSH_CMD_EXPORT(app_lcd_circle, show circle on LCD);
+MSH_CMD_EXPORT(app_lcd_clean, clean LCD);
 
 int lcd_init(void)
 {
     lcd_clear(WHITE);
 
     /* show RT-Thread logo */
-    lcd_show_image(0, 0, 240, 69, image_rttlogo);
+    // lcd_show_image(0, 0, 240, 69, image_rttlogo);
 
     /* set the background color and foreground color */
     lcd_set_color(WHITE, BLACK);
@@ -69,11 +69,11 @@ int lcd_init(void)
     lcd_draw_line(0, 69 + 16 + 24 + 32, 240, 69 + 16 + 24 + 32);
 
     /* draw a concentric circles */
-    lcd_draw_point(120, 194);
-    for (int i = 0; i < 46; i += 4)
-    {
-        lcd_draw_circle(120, 194, i);
-    }
-    return 0;
+    // lcd_draw_point(120, 194);
+    // for (int i = 0; i < 46; i += 4)
+    // {
+    //     lcd_draw_circle(120, 194, i);
+    // }
+     return 0;
 }
-// INIT_APP_EXPORT(lcd_init); // 使用自动初始化
+INIT_APP_EXPORT(lcd_init); // 使用自动初始化

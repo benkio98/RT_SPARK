@@ -18,6 +18,7 @@
 
 int main(void)
 {
+    led_matrix_clear(); ///< 清除LED灯光显示 [bug] 开机 Led1 亮绿灯
     while(1)
     {
         rt_thread_mdelay(1000);

@@ -17,3 +17,7 @@ void app_lcd_clean(void);
 int lcd_init(void);
 
 #endif /* __APP_LCD_H__ */
+
+/*
+https://club.rt-thread.org/ask/article/9430017b4b30ca05.html
+*/
