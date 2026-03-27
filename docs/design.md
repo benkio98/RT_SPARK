@@ -6,6 +6,7 @@
 |   |—— bsp             # 板级支持包
 |   |   |—— chip        # 外部芯片驱动（如 aht20, w25q64 ）
 |   |   └── device      # 板载设备驱动（如 led, beep, key ）
+|   |—— drivers         # MCU 内部外设驱动（如 uart, spi, i2c, can ）
 │   └── main.c          # 应用程序入口
 ├── docs                # 项目文档存放目录（如 *.md, *.pdf ）
 

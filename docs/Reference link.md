@@ -9,4 +9,4 @@ https://doc.embedfire.com/mcu/stm32/f407batianhu/std/zh/latest/book/USART.html
 - 百度网盘：https://pan.baidu.com/s/10Toony2CCGN82_hoX5y5PA?pwd=xh1h 提取码：xh1h
 - SDK github：https://github.com/RT-Thread-Studio/sdk-bsp-stm32f407-spark
 - SDK gitee：https://gitee.com/RT-Thread-Studio-Mirror/sdk-bsp-stm32f407-spark
-
+- 广成 CAN 总线分析仪资料 https://www.gcan.com.cn/3d05/222b/0cb5/e1f0
