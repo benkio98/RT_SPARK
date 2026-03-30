@@ -3,5 +3,10 @@
   "path": "/packages/peripherals/sensors/aht10", 
   "ver": "v2.1.0", 
   "name": "AHT10"
+ }, 
+ {
+  "path": "/packages/peripherals/sensors/icm20608", 
+  "ver": "latest", 
+  "name": "ICM20608"
  }
 ]
