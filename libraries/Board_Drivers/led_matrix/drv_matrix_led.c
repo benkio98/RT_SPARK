@@ -69,6 +69,13 @@ DMA_HandleTypeDef hdma_tim3_ch1;
 ALIGN(4)
 uint8_t raw_led_buffer[LED_RAW_BUF_SIZE];
 
+/* 额外准备一份“reset帧”，避免首次刷新前直接使用业务缓冲区 */
+ALIGN(4)
+static uint8_t reset_led_buffer[LED_RAW_BUF_SIZE];
+
+/* 首次真正刷新前，强制补一次 reset */
+static rt_bool_t s_led_matrix_first_refresh = RT_TRUE;
+
 // 模拟bit码: 2为逻辑0, 7为逻辑1
 const uint8_t tile[2] = {2, 7};
 
@@ -237,35 +244,62 @@ INIT_APP_EXPORT(led_matrix_init);
 //TODO 多线程重入处理
 static void tim_dma_send_raw(uint8_t *raw_buffer, uint32_t size)
 {
+    /* 首次发送前，先强制补一帧 reset，避免上电后第一帧毛刺点亮 */
+    if (s_led_matrix_first_refresh)
+    {
+#if defined (BSP_USING_ONBOARD_LED_MATRIX) && defined (BSP_USING_EXT_LED_MATRIX)
+        uint16_t offset = (BSP_ONBOAR_LED_NUMS * 24 * 2);
+        int16_t ext_size = size - (BSP_ONBOAR_LED_NUMS * 24);
+
+        while (HAL_DMA_GetState(&hdma_tim3_ch2) != HAL_DMA_STATE_READY)
+            ;
+        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_2, (uint32_t *)reset_led_buffer, size);
+
+        rt_thread_mdelay(1);
+
+        while (HAL_DMA_GetState(&hdma_tim3_ch1) != HAL_DMA_STATE_READY)
+            ;
+        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)(reset_led_buffer + offset), ext_size);
+
+#elif defined (BSP_USING_ONBOARD_LED_MATRIX)
+        while (HAL_DMA_GetState(&hdma_tim3_ch2) != HAL_DMA_STATE_READY)
+            ;
+        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_2, (uint32_t *)reset_led_buffer, size);
+
+#elif defined(BSP_USING_EXT_LED_MATRIX)
+        while (HAL_DMA_GetState(&hdma_tim3_ch1) != HAL_DMA_STATE_READY)
+            ;
+        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)reset_led_buffer, size);
+#endif
+
+        /* 给 WS2812 留足 reset 低电平时间 */
+        rt_hw_us_delay(80);
+        s_led_matrix_first_refresh = RT_FALSE;
+    }
+
 #if defined (BSP_USING_ONBOARD_LED_MATRIX) && defined (BSP_USING_EXT_LED_MATRIX)
     uint16_t offset = (BSP_ONBOAR_LED_NUMS * 24 * 2);
     int16_t ext_size = size - (BSP_ONBOAR_LED_NUMS * 24);
     if ((ext_size > 0) || (ext_size <= (BSP_EXT_LED_NUMS * 24)))
     {
-        // 阻塞判断上次DMA有没有传输完成
         while (HAL_DMA_GetState(&hdma_tim3_ch2) != HAL_DMA_STATE_READY)
             ;
-        //先发送板载灯珠
         HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_2, (uint32_t *)raw_buffer, size);
-        rt_thread_mdelay(1);    //wait for DMA channel throughput down.
-        // 阻塞判断上次DMA有没有传输完成
+
+        rt_thread_mdelay(1);
+
         while (HAL_DMA_GetState(&hdma_tim3_ch1) != HAL_DMA_STATE_READY)
             ;
-        //计算index偏移，发送板外灯珠
         HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)(raw_buffer + offset), ext_size);
     }
-
 #elif defined (BSP_USING_ONBOARD_LED_MATRIX)
-    // 阻塞判断上次DMA有没有传输完成
     while (HAL_DMA_GetState(&hdma_tim3_ch2) != HAL_DMA_STATE_READY)
         ;
-    // 发送一个24bit的RGB数据
     HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_2, (uint32_t *)raw_buffer, size);
+
 #elif defined(BSP_USING_EXT_LED_MATRIX)
-    // 阻塞判断上次DMA有没有传输完成
     while (HAL_DMA_GetState(&hdma_tim3_ch1) != HAL_DMA_STATE_READY)
         ;
-    // 发送一个24bit的RGB数据
     HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)raw_buffer, size);
 #endif
 }
@@ -290,6 +324,7 @@ void led_matrix_clear(void)
         raw_led_buffer[(i << 1)] = tile[0];
         raw_led_buffer[(i << 1) + 1] = 0;
     }
+
     tim_dma_send_raw(raw_led_buffer, LED_RAW_BUF_SIZE / 2);
 }
 MSH_CMD_EXPORT(led_matrix_clear, Test led matrix on board)
@@ -303,7 +338,7 @@ MSH_CMD_EXPORT(led_matrix_clear, Test led matrix on board)
 void led_matrix_set_color(uint16_t n, pixel_rgb_t c)
 {
     uint8_t dat_r, dat_b, dat_g;
-    if (n > LED_TOTAL_NUMS)
+    if (n >= LED_TOTAL_NUMS)
     {
         return ;
     }
@@ -377,7 +412,7 @@ void led_matrix_fill(pixel_rgb_t pix, uint16_t first, uint16_t count)
 void led_matrix_fill_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
     pixel_rgb_t color = {r, g, b};
-    led_matrix_fill(color, 0, 19);
+    led_matrix_fill(color, 0, LED_TOTAL_NUMS);
 }
 
 void exapmle_led_matrix_fill_show(uint8_t index)
@@ -385,19 +420,19 @@ void exapmle_led_matrix_fill_show(uint8_t index)
     switch (index)
     {
     case 0:
-        led_matrix_fill(LT_RED, 0, 19);
+        led_matrix_fill(LT_RED, 0, LED_TOTAL_NUMS);
         led_matrix_reflash();
         break;
     case 1:
-        led_matrix_fill(LT_GREEN, 0, 19);
+        led_matrix_fill(LT_GREEN, 0, LED_TOTAL_NUMS);
         led_matrix_reflash();
         break;
     case 2:
-        led_matrix_fill(LT_BLUE, 0, 19);
+        led_matrix_fill(LT_BLUE, 0, LED_TOTAL_NUMS);
         led_matrix_reflash();
         break;
     case 3:
-        led_matrix_fill(LT_WHITE, 0, 19);
+        led_matrix_fill(LT_WHITE, 0, LED_TOTAL_NUMS);
         led_matrix_reflash();
         break;
     default:
