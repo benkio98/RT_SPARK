@@ -12,6 +12,7 @@
 #include <rtthread.h>
 #include <packages/EasyFlash-v4.1.0/inc/easyflash.h>
 #include <fal.h>
+#include <dfs_fs.h>
 #include <stdlib.h>
 
 #define LOG_TAG "cmp_fal"
@@ -19,6 +20,7 @@
 #include <ulog.h>
 
 #define BUF_SIZE 1024
+#define FS_PARTITION_NAME "filesystem"
 
 static int fal_test(const char *partiton_name);
 static void test_env(void);
@@ -217,4 +219,55 @@ static void test_env(void)
     ef_set_env("boot_times", c_new_boot_times);
     ef_save_env();
 }
+
+
+int fatfs_flash(void)
+{
+    /* 在 spi flash 中名为 "filesystem" 的分区上创建一个块设备 */
+    struct rt_device *flash_dev = fal_blk_device_create(FS_PARTITION_NAME);
+    if (flash_dev == NULL)
+    {
+        LOG_E("Can't create a block device on '%s' partition.", FS_PARTITION_NAME);
+    }
+    else
+    {
+        LOG_D("Create a block device on the %s partition of flash successful.", FS_PARTITION_NAME);
+    }
+
+    /* 挂载 spi flash 中名为 "filesystem" 的分区上的文件系统 */
+    if (dfs_mount(flash_dev->parent.name, "/", "elm", 0, 0) == 0)
+    {
+        LOG_I("Filesystem initialized!");
+    }
+    else
+    {
+        LOG_E("Failed to initialize filesystem!");
+        LOG_D("You should create a filesystem on the block device first!");
+
+        /* mkfs -t elm filesystem */
+        // LOG_I("Trying to format block device %s...", flash_dev->parent.name);
+        // /* 格式化文件系统 */
+        // if (dfs_mkfs("elm", flash_dev->parent.name) == 0)
+        // {
+        //     LOG_I("Format successful. Trying to mount again...");
+        //     /* 重新挂载文件系统 */
+        //     if (dfs_mount(flash_dev->parent.name, "/", "elm", 0, 0) == 0)
+        //     {
+        //         LOG_I("Filesystem initialized!");
+        //     }
+        //     else
+        //     {
+        //         LOG_E("Failed to mount filesystem after format!");
+        //     }
+        // }
+        // else
+        // {
+        //     LOG_E("Format failed!");
+        // }
+    }
+
+    return 0;
+}
+
+INIT_APP_EXPORT(fatfs_flash);
 
