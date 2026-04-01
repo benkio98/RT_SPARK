@@ -1,5 +1,10 @@
 [
  {
+  "path": "/packages/tools/EasyFlash", 
+  "ver": "v4.1.0", 
+  "name": "EASYFLASH"
+ }, 
+ {
   "path": "/packages/peripherals/sensors/aht10", 
   "ver": "v2.1.0", 
   "name": "AHT10"

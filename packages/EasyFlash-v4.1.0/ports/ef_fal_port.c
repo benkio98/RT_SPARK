@@ -35,11 +35,10 @@
 #include <fal.h>
 
 /* EasyFlash partition name on FAL partition table */
-#define FAL_EF_PART_NAME               "easyflash"
+#define FAL_EF_PART_NAME               "ef"
 
 /* default ENV set for user */
 static const ef_env default_env_set[] = {
-        {"boot_times", "0"},
         {"iap_need_copy_app", "0"},
         {"iap_need_crc32_check", "0"},
         {"iap_copy_app_size", "0"},

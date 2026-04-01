@@ -1,1 +1,1 @@
-[{"config_name":"Debug","exclude_files":["libraries/Board_Drivers"]}]
+[{"config_name":"Debug","exclude_files":["libraries/Board_Drivers","libraries/Board_Drivers/pm","libraries/Board_Drivers/audio","packages/EasyFlash-v4.1.0/ports"]}]

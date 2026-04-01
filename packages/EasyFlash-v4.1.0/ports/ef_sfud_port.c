@@ -22,24 +22,21 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Function: Portable interface for FAL (Flash Abstraction Layer) partition.
- * Created on: 2018-05-19
+ * Function: Portable interface for SFUD flash driver.
+ * Created on: 2015-01-16
  */
 
 #include <easyflash.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <sfud.h>
 #include <rthw.h>
 #include <rtthread.h>
-#include <fal.h>
-
-/* EasyFlash partition name on FAL partition table */
-#define FAL_EF_PART_NAME               "easyflash"
+#include <spi_flash.h>
 
 /* default ENV set for user */
 static const ef_env default_env_set[] = {
-        {"boot_times", "0"},
         {"iap_need_copy_app", "0"},
         {"iap_need_crc32_check", "0"},
         {"iap_copy_app_size", "0"},
@@ -48,7 +45,8 @@ static const ef_env default_env_set[] = {
 
 static char log_buf[RT_CONSOLEBUF_SIZE];
 static struct rt_semaphore env_cache_lock;
-static const struct fal_partition *part = NULL;
+
+static const sfud_flash *flash;
 
 /**
  * Flash port for hardware initialize.
@@ -66,8 +64,8 @@ EfErrCode ef_port_init(ef_env const **default_env, size_t *default_env_size) {
 
     rt_sem_init(&env_cache_lock, "env lock", 1, RT_IPC_FLAG_PRIO);
 
-    part = fal_partition_find(FAL_EF_PART_NAME);
-    EF_ASSERT(part);
+    extern rt_spi_flash_device_t w25q64;
+    flash = (sfud_flash_t)(w25q64->user_data);
 
     return result;
 }
@@ -85,7 +83,7 @@ EfErrCode ef_port_init(ef_env const **default_env, size_t *default_env_size) {
 EfErrCode ef_port_read(uint32_t addr, uint32_t *buf, size_t size) {
     EfErrCode result = EF_NO_ERR;
 
-    fal_partition_read(part, addr, (uint8_t *)buf, size);
+    sfud_read(flash, addr, size, (uint8_t *)buf);
 
     return result;
 }
@@ -102,15 +100,16 @@ EfErrCode ef_port_read(uint32_t addr, uint32_t *buf, size_t size) {
  */
 EfErrCode ef_port_erase(uint32_t addr, size_t size) {
     EfErrCode result = EF_NO_ERR;
+    sfud_err sfud_result = SFUD_SUCCESS;
 
     /* make sure the start address is a multiple of FLASH_ERASE_MIN_SIZE */
     EF_ASSERT(addr % EF_ERASE_MIN_SIZE == 0);
 
-    if (fal_partition_erase(part, addr, size) < 0)
-    {
+    sfud_result = sfud_erase(flash, addr, size);
+
+    if(sfud_result != SFUD_SUCCESS) {
         result = EF_ERASE_ERR;
     }
-
     return result;
 }
 /**
@@ -126,9 +125,11 @@ EfErrCode ef_port_erase(uint32_t addr, size_t size) {
  */
 EfErrCode ef_port_write(uint32_t addr, const uint32_t *buf, size_t size) {
     EfErrCode result = EF_NO_ERR;
+    sfud_err sfud_result = SFUD_SUCCESS;
 
-    if (fal_partition_write(part, addr, (uint8_t *)buf, size) < 0)
-    {
+    sfud_result = sfud_write(flash, addr, size, (const uint8_t *)buf);
+
+    if(sfud_result != SFUD_SUCCESS) {
         result = EF_WRITE_ERR;
     }
 

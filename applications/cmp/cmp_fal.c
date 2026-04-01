@@ -10,7 +10,9 @@
 
 
 #include <rtthread.h>
+#include <packages/EasyFlash-v4.1.0/inc/easyflash.h>
 #include <fal.h>
+#include <stdlib.h>
 
 #define LOG_TAG "cmp_fal"
 #define LOG_LVL         LOG_LVL_DBG
@@ -19,8 +21,9 @@
 #define BUF_SIZE 1024
 
 static int fal_test(const char *partiton_name);
+static void test_env(void);
 
-INIT_COMPONENT_EXPORT(fal_init);
+// INIT_COMPONENT_EXPORT(fal_init);
 
 
 int cmp_fal_test(void)
@@ -175,3 +178,43 @@ static int fal_test(const char *partiton_name)
     ret = 0;
     return ret;
 }
+
+///\ fal, easyflash 组件初始化函数
+int fal_ef_init(void)
+{
+    fal_init();
+
+    if (easyflash_init() == EF_NO_ERR)
+    {
+        /* 演示环境变量功能 */
+        test_env();
+    }
+
+    return 0;
+}
+INIT_COMPONENT_EXPORT(fal_ef_init); // 使用组件初始化
+
+static void test_env(void)
+{
+    uint32_t i_boot_times = 0;
+    char *c_old_boot_times, c_new_boot_times[11] = {0};
+
+    /* 从环境变量中获取启动次数 */
+    c_old_boot_times = ef_get_env("boot_times");
+    /* 获取启动次数是否失败 */
+    if (c_old_boot_times == RT_NULL)
+        c_old_boot_times[0] = '0';
+
+    i_boot_times = atol(c_old_boot_times);
+    /* 启动次数加 1 */
+    i_boot_times++;
+    LOG_D("===============================================");
+    LOG_D("The system now boot %ld times", i_boot_times);
+    LOG_D("===============================================");
+    /* 数字转字符串 */
+    sprintf(c_new_boot_times, "%ld", i_boot_times);
+    /* 保存开机次数的值 */
+    ef_set_env("boot_times", c_new_boot_times);
+    ef_save_env();
+}
+

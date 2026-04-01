@@ -121,4 +121,4 @@ int app_pm(void)
     // }
     return 0;
 }
-INIT_APP_EXPORT(app_pm); // 使用自动初始化
+// INIT_APP_EXPORT(app_pm); // 使用自动初始化
