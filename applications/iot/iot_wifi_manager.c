@@ -86,7 +86,6 @@ static void wlan_connect_fail_handler(int event, struct rt_wlan_buff *buff, void
 }
 
 static void wifi_app_entry(void *parameter)
-// int main(void)
 {
     static int i = 0; 
     int result = RT_EOK;
@@ -106,8 +105,6 @@ static void wifi_app_entry(void *parameter)
     if(rt_wlan_scan() == RT_EOK)
     {
         LOG_D("the scan is started... ");
-        /*等待扫描完毕 (移入成功分支中，防止失败时永久阻塞卡死) */
-        // rt_sem_take(&scan_done,RT_WAITING_FOREVER);
     }else
     {
         LOG_E("scan failed");
@@ -152,10 +149,17 @@ static void wifi_app_entry(void *parameter)
         LOG_E("The AP(%s) is connect failed!", WLAN_SSID);
     }
 
-    rt_thread_mdelay(5000);
+    if (!rt_wlan_is_ready())
+    {
+        LOG_I("Try to connect default AP: %s", WLAN_SSID);
+        /* rt_wlan_connect 会自动将此密码保存到缓存/Flash。后续断网会自动无限重试 */
+        rt_wlan_connect(WLAN_SSID, WLAN_PASSWORD);
+    }
 
-    LOG_D("ready to disconect from ap ...");
-    rt_wlan_disconnect();
+    // rt_thread_mdelay(5000);
+
+    // LOG_D("ready to disconect from ap ...");
+    // rt_wlan_disconnect();
 
     /* 自动连接 */
     LOG_D("start to autoconnect ...");
