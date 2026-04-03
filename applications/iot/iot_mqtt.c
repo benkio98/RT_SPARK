@@ -46,24 +46,24 @@ static void mq_publish(const char *send_str);
 char sup_pub_topic[48] = {0};
 
 /* 连接成功的回调函数 */
-static void wlan_connect_handler(int event, struct rt_wlan_buff *buff, void *parameter)
-{
-    rt_kprintf("%s\n", __FUNCTION__);
-    if ((buff != RT_NULL) && (buff->len == sizeof(struct rt_wlan_info)))
-    {
-        rt_kprintf("ssid : %s \n", ((struct rt_wlan_info *)buff->data)->ssid.val);
-    }
-}
+// static void wlan_connect_handler(int event, struct rt_wlan_buff *buff, void *parameter)
+// {
+//     rt_kprintf("%s\n", __FUNCTION__);
+//     if ((buff != RT_NULL) && (buff->len == sizeof(struct rt_wlan_info)))
+//     {
+//         rt_kprintf("ssid : %s \n", ((struct rt_wlan_info *)buff->data)->ssid.val);
+//     }
+// }
 
 /* 连接失败的回调函数 */
-static void wlan_connect_fail_handler(int event, struct rt_wlan_buff *buff, void *parameter)
-{
-    rt_kprintf("%s\n", __FUNCTION__);
-    if ((buff != RT_NULL) && (buff->len == sizeof(struct rt_wlan_info)))
-    {
-        rt_kprintf("ssid : %s \n", ((struct rt_wlan_info *)buff->data)->ssid.val);
-    }
-}
+// static void wlan_connect_fail_handler(int event, struct rt_wlan_buff *buff, void *parameter)
+// {
+//     rt_kprintf("%s\n", __FUNCTION__);
+//     if ((buff != RT_NULL) && (buff->len == sizeof(struct rt_wlan_info)))
+//     {
+//         rt_kprintf("ssid : %s \n", ((struct rt_wlan_info *)buff->data)->ssid.val);
+//     }
+// }
 
 static void mqtt_app_entry(void *parameter)
 {
@@ -95,7 +95,7 @@ int iot_mqtt_init(void)
     
     return 0;
 }
-INIT_APP_EXPORT(iot_mqtt_init);
+// INIT_APP_EXPORT(iot_mqtt_init);
 
 static void mqtt_sub_callback(MQTTClient *c, MessageData *msg_data)
 {

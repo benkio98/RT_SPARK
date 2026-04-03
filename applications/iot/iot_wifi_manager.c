@@ -85,6 +85,7 @@ static void wlan_connect_fail_handler(int event, struct rt_wlan_buff *buff, void
     }
 }
 
+/* 开机默认自动连接，连不上再连默认配置，并在断网时自动恢复 */
 static void wifi_app_entry(void *parameter)
 {
     static int i = 0; 
@@ -168,7 +169,7 @@ static void wifi_app_entry(void *parameter)
 
 int iot_wifi_manager_init(void)
 {
-    rt_thread_t tid = rt_thread_create("wifi_app", wifi_app_entry, RT_NULL, 4096, 21, 10);
+    rt_thread_t tid = rt_thread_create("wifi_app", wifi_app_entry, RT_NULL, 2048, 21, 10);
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);
