@@ -192,6 +192,7 @@
 /* Docking with protocol stacks */
 
 #define SAL_USING_LWIP
+#define SAL_USING_TLS
 /* end of Docking with protocol stacks */
 #define SAL_USING_POSIX
 #define RT_USING_NETDEV
@@ -321,6 +322,16 @@
 
 /* security packages */
 
+#define PKG_USING_MBEDTLS
+
+/* Select Root Certificate */
+
+#define PKG_USING_MBEDTLS_USER_CERTS
+/* end of Select Root Certificate */
+#define MBEDTLS_AES_ROM_TABLES
+#define MBEDTLS_ECP_WINDOW_SIZE 2
+#define MBEDTLS_SSL_MAX_CONTENT_LEN 3584
+#define PKG_USING_MBEDTLS_LATEST_VERSION
 /* end of security packages */
 
 /* language packages */

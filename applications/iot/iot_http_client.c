@@ -76,7 +76,7 @@ int iot_http_client_init(void)
     }
     return 0;
 }
-INIT_APP_EXPORT(iot_http_client_init);
+// INIT_APP_EXPORT(iot_http_client_init);
 
 /**
  * The callback of network ready event

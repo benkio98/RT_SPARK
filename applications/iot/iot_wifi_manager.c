@@ -24,8 +24,8 @@
 #define LOG_LVL         LOG_LVL_DBG
 #include <ulog.h>
 
-#define WLAN_SSID       "Bioeasy-Office"     ///< 根据实际情况修改
-#define WLAN_PASSWORD   "Bio@0808"      ///< 根据实际情况修改
+#define WLAN_SSID       "dududu"     ///< 根据实际情况修改
+#define WLAN_PASSWORD   "33331111"      ///< 根据实际情况修改
 #define NET_READY_TIME_OUT (rt_tick_from_millisecond(15 * 1000))
 
 static void print_wlan_information(struct rt_wlan_info *info,int index);
