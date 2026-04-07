@@ -194,7 +194,7 @@ int fal_ef_init(void)
 
     return 0;
 }
-INIT_COMPONENT_EXPORT(fal_ef_init); // 使用组件初始化
+// INIT_COMPONENT_EXPORT(fal_ef_init); // 使用组件初始化
 
 static void test_env(void)
 {
@@ -269,5 +269,5 @@ int fatfs_flash(void)
     return 0;
 }
 
-INIT_APP_EXPORT(fatfs_flash);
+// INIT_APP_EXPORT(fatfs_flash);
 

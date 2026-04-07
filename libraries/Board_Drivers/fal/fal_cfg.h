@@ -23,13 +23,13 @@
 extern const struct fal_flash_dev stm32_onchip_flash_16k;
 extern const struct fal_flash_dev stm32_onchip_flash_64k;
 extern const struct fal_flash_dev stm32_onchip_flash_128k;
-extern struct fal_flash_dev w25q64;
+extern struct fal_flash_dev nor_flash;
 
 /* flash device table */
 #define FAL_FLASH_DEV_TABLE                                          \
 {                                                                    \
     &stm32_onchip_flash_128k,                                        \
-    &w25q64,                                                        \
+    &nor_flash,                                                        \
 }
 
 /* ====================== Partition Configuration ========================== */
@@ -37,23 +37,23 @@ extern struct fal_flash_dev w25q64;
     #define FAL_PART_TABLE                                                                                              \
     {                                                                                                                   \
         {FAL_PART_MAGIC_WROD, "bootloader", "onchip_flash_128k",                             0,       128 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,        "app", "onchip_flash_128k",                    128 * 1024,       384 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,  "easyflash",    "W25Q64",                                    0,       512 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,   "download",    "W25Q64",                           512 * 1024,      1024 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD, "wifi_image",    "W25Q64",                  (512 + 1024) * 1024,       512 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,       "font",    "W25Q64",            (512 + 1024 + 512) * 1024,  3 * 1024 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD, "filesystem",    "W25Q64", (512 + 1024 + 512 + 3 * 1024) * 1024,  3 * 1024 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,        "app", "onchip_flash_128k",                    128 * 1024,       512 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,  "easyflash",    "nor_flash",                                    0,       512 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,   "download",    "nor_flash",                           512 * 1024,      1024 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD, "wifi_image",    "nor_flash",                  (512 + 1024) * 1024,       512 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,       "font",    "nor_flash",            (512 + 1024 + 512) * 1024,  3 * 1024 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD, "filesystem",    "nor_flash", (512 + 1024 + 512 + 3 * 1024) * 1024,  3 * 1024 * 1024, 0}, \
     }
 #else
     #define FAL_PART_TABLE                                                                                              \
     {                                                                                                                   \
         {FAL_PART_MAGIC_WROD,        "app", "onchip_flash_128k",                            0,       384 * 1024, 0}, \
         {FAL_PART_MAGIC_WROD,      "param", "onchip_flash_128k",                   384 * 1024,       640 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,  "easyflash",    "W25Q64",                                    0,       512 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,   "download",    "W25Q64",                           512 * 1024,      1024 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD, "wifi_image",    "W25Q64",                  (512 + 1024) * 1024,       512 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD,       "font",    "W25Q64",            (512 + 1024 + 512) * 1024,  3 * 1024 * 1024, 0}, \
-        {FAL_PART_MAGIC_WROD, "filesystem",    "W25Q64", (512 + 1024 + 512 + 3 * 1024) * 1024,  3 * 1024 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,  "easyflash",    "nor_flash",                                    0,       512 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,   "download",    "nor_flash",                           512 * 1024,      1024 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD, "wifi_image",    "nor_flash",                  (512 + 1024) * 1024,       512 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD,       "font",    "nor_flash",            (512 + 1024 + 512) * 1024,  3 * 1024 * 1024, 0}, \
+        {FAL_PART_MAGIC_WROD, "filesystem",    "nor_flash", (512 + 1024 + 512 + 3 * 1024) * 1024,  3 * 1024 * 1024, 0}, \
     }
 #endif /*FAL_PART_TABLE*/
 #endif /*BSP_USING_BOOTLOADER*/

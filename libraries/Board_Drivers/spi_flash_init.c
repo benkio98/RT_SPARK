@@ -20,13 +20,15 @@ int rt_hw_spi_flash_init(void)
     __HAL_RCC_GPIOB_CLK_ENABLE();
     rt_hw_spi_device_attach("spi2", "spi20", GPIOB, GPIO_PIN_12);
 
-    if (RT_NULL == rt_sfud_flash_probe("W25Q64", "spi20"))
+    rt_thread_mdelay(10); 
+
+    if (RT_NULL == rt_sfud_flash_probe("nor_flash", "spi20"))
     {
         return -RT_ERROR;
     }
 
     return RT_EOK;
 }
-INIT_COMPONENT_EXPORT(rt_hw_spi_flash_init);
+INIT_DEVICE_EXPORT(rt_hw_spi_flash_init);
 #endif
 

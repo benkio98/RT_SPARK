@@ -112,7 +112,7 @@
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
-#define RT_SERIAL_RB_BUFSZ 64
+#define RT_SERIAL_RB_BUFSZ 256
 #define RT_USING_CAN
 #define RT_CAN_USING_HDR
 #define RT_USING_I2C
@@ -192,7 +192,6 @@
 /* Docking with protocol stacks */
 
 #define SAL_USING_LWIP
-#define SAL_USING_TLS
 /* end of Docking with protocol stacks */
 #define SAL_USING_POSIX
 #define RT_USING_NETDEV
@@ -249,6 +248,8 @@
 
 /* Utilities */
 
+#define RT_USING_RYM
+#define YMODEM_USING_FILE_TRANSFER
 #define RT_USING_ULOG
 #define ULOG_OUTPUT_LVL_D
 #define ULOG_OUTPUT_LVL 7
@@ -318,20 +319,14 @@
 /* IoT Cloud */
 
 /* end of IoT Cloud */
+#define PKG_USING_OTA_DOWNLOADER
+#define OTA_DOWNLOADER_DEBUG
+#define PKG_USING_YMODEM_OTA
+#define PKG_USING_OTA_DOWNLOADER_V100
 /* end of IoT - internet of things */
 
 /* security packages */
 
-#define PKG_USING_MBEDTLS
-
-/* Select Root Certificate */
-
-#define PKG_USING_MBEDTLS_USER_CERTS
-/* end of Select Root Certificate */
-#define MBEDTLS_AES_ROM_TABLES
-#define MBEDTLS_ECP_WINDOW_SIZE 2
-#define MBEDTLS_SSL_MAX_CONTENT_LEN 3584
-#define PKG_USING_MBEDTLS_LATEST_VERSION
 /* end of security packages */
 
 /* language packages */
@@ -495,10 +490,12 @@
 #define BSP_USING_USB_TO_USART
 #define BSP_USING_ONBOARD_LCD
 #define BSP_USING_ONBOARD_LCD_PWM_BL
+#define BSP_USING_ONBOARD_LCD_TEAREFFECT
 #define BSP_USING_LED_MATRIX
 #define BSP_USING_ONBOARD_LED_MATRIX
 #define BSP_USING_SPI_FLASH
 #define BSP_USING_FAL
+#define BSP_USING_BOOTLOADER
 #define BSP_USING_EASYFLASH
 #define BSP_USING_RW007_WLAN
 #define BSP_USING_AHT21
@@ -512,6 +509,8 @@
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART1
+#define BSP_UART1_RX_USING_DMA
+#define BSP_UART1_TX_USING_DMA
 #define BSP_USING_ONCHIP_RTC
 #define BSP_RTC_USING_LSE
 #define BSP_USING_PWM

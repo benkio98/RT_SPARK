@@ -176,7 +176,7 @@ int iot_wifi_manager_init(void)
     }
     return 0;
 }
-INIT_APP_EXPORT(iot_wifi_manager_init);
+// INIT_APP_EXPORT(iot_wifi_manager_init);
 
 static void print_wlan_information(struct rt_wlan_info *info,int index)
 {

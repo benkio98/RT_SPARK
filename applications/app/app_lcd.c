@@ -46,9 +46,9 @@ void app_lcd_clean(void)
     lcd_clear(WHITE);
 }
 
-MSH_CMD_EXPORT(app_lcd_string, show string on LCD);
-MSH_CMD_EXPORT(app_lcd_circle, show circle on LCD);
-MSH_CMD_EXPORT(app_lcd_clean, clean LCD);
+// MSH_CMD_EXPORT(app_lcd_string, show string on LCD);
+// MSH_CMD_EXPORT(app_lcd_circle, show circle on LCD);
+// MSH_CMD_EXPORT(app_lcd_clean, clean LCD);
 
 int lcd_init(void)
 {
@@ -76,4 +76,4 @@ int lcd_init(void)
     // }
      return 0;
 }
-INIT_APP_EXPORT(lcd_init); // 使用自动初始化
+// INIT_APP_EXPORT(lcd_init); // 使用自动初始化

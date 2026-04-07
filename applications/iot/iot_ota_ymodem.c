@@ -5,39 +5,20 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2023-5-10      ShiHao       first version
+ * 2026-04-03     laixiaobin   the first version
  */
-#if 0
-#include <rtthread.h>
-#include <rtdevice.h>
-
-#define DBG_TAG "main"
-#define DBG_LVL         DBG_LOG
-#include <rtdbg.h>
-
-
-int main(void)
-{
-    while(1)
-    {
-        rt_thread_mdelay(1000);
-    }
-
-    return 0;
-}
-#endif
 
 #include <rtthread.h>
 #include <fal.h>
 #include <dfs_fs.h>
 
-#define LOG_TAG "main"
+#define LOG_TAG "iot_ota_ymodem"
 #define LOG_LVL         LOG_LVL_DBG
 #include <ulog.h>
 
 #define FS_PARTITION_NAME "filesystem"
 
-#define APP_VERSION "2.0.0"
+#define APP_VERSION "1.0.0"
 /**
  * Function    ota_app_vtor_reconfig
  * Description Set Vector Table base location to the start addr of app(RT_APP_PART_ADDR).
@@ -51,13 +32,14 @@ static int ota_app_vtor_reconfig(void)
 
     return 0;
 }
-INIT_BOARD_EXPORT(ota_app_vtor_reconfig);
+// INIT_BOARD_EXPORT(ota_app_vtor_reconfig);
 
 
-int main(void)
+int iot_ota_init(void)
 {
     LOG_D("The current version of APP firmware is %s", APP_VERSION);
 	
+    #if 0
     /* 初始化 fal 功能 */
     fal_init();
 
@@ -82,8 +64,7 @@ int main(void)
         LOG_E("Failed to initialize filesystem!");
         LOG_D("You should create a filesystem on the block device first!");
     }
-
+    #endif
     return 0;
 }
-
-
+INIT_APP_EXPORT(iot_ota_init);

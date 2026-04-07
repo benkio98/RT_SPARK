@@ -7,10 +7,10 @@
 /* Program Entry, set to mark it as "used" and avoid gc */
 MEMORY
 {
-    CODE (rx) : ORIGIN = 0x08000000, LENGTH = 1024k /* 1024KB flash */
-    RAM1 (rw) : ORIGIN = 0x20000000, LENGTH =  128k /* 128K sram */
-    RAM2 (rw) : ORIGIN = 0x10000000, LENGTH =   64k /* 64K sram */
-    MCUlcdgrambysram (rw) : ORIGIN =0x68000000, LENGTH = 1024k
+CODE (rx) : ORIGIN =0x08020000,LENGTH =1024k
+RAM1 (rw) : ORIGIN =0x20000000,LENGTH =128k
+RAM2 (rw) : ORIGIN =0x10000000,LENGTH =64k
+MCUlcdgrambysram (rw) : ORIGIN =0x68000000,LENGTH =1024k
 }
 ENTRY(Reset_Handler)
 _system_stack_size = 0x400;
