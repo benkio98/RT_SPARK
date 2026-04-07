@@ -160,3 +160,112 @@ System now will restart...
 
 
 
+``` shell 例程 开机运行app 2.0.0
+[I]Verify 'app' partition(fw ver: 2.0.0, timestamp: 1711534222) success.
+[I/FAL] Find user firmware at app partition 0x08020000 successfully.
+[I/FAL] Bootloader jumps to user firmware now.
+
+ \ | /
+- RT -     Thread Operating System
+ / | \     4.1.1 build Mar 27 2024 18:09:18
+ 2006 - 2022 Copyright by RT-Thread team
+[I/SFUD] Find a Winbond flash chip. Size is 8388608 bytes.
+[I/SFUD] W25Q64 flash device is initialize success.
+[I/SFUD] Probe SPI flash W25Q64 by SPI device spi20 success.
+[D/main] The current version of APP firmware is 2.0.0
+[D/FAL] (fal_flash_init:47) Flash device |        onchip_flash_128k | addr: 0x08000000 | len: 0x00100000 | blk_size: 0x00020000 |initialized finish.
+[D/FAL] (fal_flash_init:47) Flash device |                   W25Q64 | addr: 0x00000000 | len: 0x00800000 | blk_size: 0x00001000 |initialized finish.
+[I/FAL] ==================== FAL partition table ====================
+[I/FAL] | name       | flash_dev         |   offset   |    length  |
+[I/FAL] -------------------------------------------------------------
+[I/FAL] | bootloader | onchip_flash_128k | 0x00000000 | 0x00020000 |
+[I/FAL] | app        | onchip_flash_128k | 0x00020000 | 0x00060000 |
+[I/FAL] | easyflash  | W25Q64            | 0x00000000 | 0x00080000 |
+[I/FAL] | download   | W25Q64            | 0x00080000 | 0x00100000 |
+[I/FAL] | wifi_image | W25Q64            | 0x00180000 | 0x00080000 |
+[I/FAL] | font       | W25Q64            | 0x00200000 | 0x00300000 |
+[I/FAL] | filesystem | W25Q64            | 0x00500000 | 0x00300000 |
+[I/FAL] =============================================================
+[I/FAL] RT-Thread Flash Abstraction Layer initialize success.
+[I/FAL] The FAL block device (filesystem) created successfully
+[D/main] Create a block device on the filesystem partition of flash successful.
+[I/main] Filesystem initialized!
+
+```
+
+``` shell 例程 升级完代码后再次运行
+msh />ymodem_ota
+Save firmware on "download" partition with device "uart1".
+Warning: Ymodem has started! This operator will not recovery.
+Please select the ota firmware file and use Ymodem to send.
+CCCCDownload firmware to flash success.
+System now will restart...
+[SFUD]Find a Winbond flash chip. Size is 8388608 bytes.
+[SFUD]spi flash device is initialize success.
+
+ __  ___     __   __   __  ___ 
+|__)  |  __ |__) /  \ /  \  |  
+|  \  |     |__) \__/ \__/  |  
+2006 - 2019 Copyright by rt-thread team
+                0.9.2 build Mar 27 2024
+[D/FAL] (fal_flash_init:63) Flash device |    onchip_flash_16k_part | addr: 0x08000000 | len: 0x00020000 | blk_size: 0x00004000 |initialized finish.
+[D/FAL] (fal_flash_init:63) Flash device |             onchip_flash | addr: 0x08020000 | len: 0x000e0000 | blk_size: 0x00020000 |initialized finish.
+[D/FAL] (fal_flash_init:63) Flash device |                nor_flash | addr: 0x00000000 | len: 0x00800000 | blk_size: 0x00001000 |initialized finish.
+[I/FAL] ==================== FAL partition table ====================
+[I/FAL] | name     | flash_dev    |   offset   |    length  |
+[I/FAL] -------------------------------------------------------------
+[I/FAL] | app      | onchip_flash | 0x00000000 | 0x00080000 |
+[I/FAL] | download | nor_flash    | 0x00080000 | 0x00080000 |
+[I/FAL] =============================================================
+[I/FAL] RT-Thread Flash Abstraction Layer (V0.4.0) initialize success.
+[I/FAL] System initialization successful.
+[I]RT-Thread TA package(V0.2.1) initialize success.
+
+[I]Verify 'download' partition(fw ver: 1.0.0, timestamp: 1711537167) success.
+[I]OTA firmware(app) upgrade(2.0.0->1.0.0) startup.
+[I]The partition 'app' is erasing.
+[I]The partition 'app' erase success.
+[I]OTA Write: [====================================================================================================] 100%
+[I]Verify 'app' partition(fw ver: 1.0.0, timestamp: 1711537167) success.
+[I/FAL] Find user firmware at app partition 0x08020000 successfully.
+[I/FAL] Bootloader jumps to user firmware now.
+
+ \ | /
+- RT -     Thread Operating System
+ / | \     4.1.1 build Mar 27 2024 18:09:18
+ 2006 - 2022 Copyright by RT-Thread team
+[I/SFUD] Find a Winbond flash chip. Size is 8388608 bytes.
+[I/SFUD] W25Q64 flash device is initialize success.
+[I/SFUD] Probe SPI flash W25Q64 by SPI device spi20 success.
+[D/main] The current version of APP firmware is 1.0.0
+[D/FAL] (fal_flash_init:47) Flash device |        onchip_flash_128k | addr: 0x08000000 | len: 0x00100000 | blk_size: 0x00020000 |initialized finish.
+[D/FAL] (fal_flash_init:47) Flash device |                   W25Q64 | addr: 0x00000000 | len: 0x00800000 | blk_size: 0x00001000 |initialized finish.
+[I/FAL] ==================== FAL partition table ====================
+[I/FAL] | name       | flash_dev         |   offset   |    length  |
+[I/FAL] -------------------------------------------------------------
+[I/FAL] | bootloader | onchip_flash_128k | 0x00000000 | 0x00020000 |
+[I/FAL] | app        | onchip_flash_128k | 0x00020000 | 0x00060000 |
+[I/FAL] | easyflash  | W25Q64            | 0x00000000 | 0x00080000 |
+[I/FAL] | download   | W25Q64            | 0x00080000 | 0x00100000 |
+[I/FAL] | wifi_image | W25Q64            | 0x00180000 | 0x00080000 |
+[I/FAL] | font       | W25Q64            | 0x00200000 | 0x00300000 |
+[I/FAL] | filesystem | W25Q64            | 0x00500000 | 0x00300000 |
+[I/FAL] =============================================================
+[I/FAL] RT-Thread Flash Abstraction Layer initialize success.
+[I/FAL] The FAL block device (filesystem) created successfully
+[D/main] Create a block device on the filesystem partition of flash successful.
+[I/main] Filesystem initialized!
+msh />
+
+```
+
+
+## 对比两份运行日志，导致 OTA 升级失败的关键差异确实在于初始化的外设数量不同。
+
+问题根本原因：
+出问题的 App 中初始化了 RW007 WiFi 模块。在目前的硬件配置中，RW007 (spi2) 与 SPI Flash (spi20) 共享了同一个 SPI 总线 (SPI2)。
+当 App 运行 ymodem_ota 下载完固件后，执行了特殊的“软重启（Soft Reset）”。此时 STM32 芯片内部被复位，但是外部接的 RW007 WiFi 芯片并没有被硬件复位，其 SPI 引脚（特别是 MISO 或者 CS 引脚）可能依然保持在使用状态并占用总线。
+这导致 Bootloader 启动后，企图通过同一根 SPI 总线读取 Flash 时产生了冲突（读不到正确的 SFDP 数据），从而报 spi flash device is initialize fail。
+
+
+

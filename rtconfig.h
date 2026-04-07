@@ -292,16 +292,6 @@
 /* Wiced WiFi */
 
 /* end of Wiced WiFi */
-#define PKG_USING_RW007
-#define PKG_USING_RW007_V210
-#define RW007_USING_STM32_DRIVERS
-#define RW007_SPI_MAX_HZ 30000000
-#define RW007_SPI_BUS_NAME "spi2"
-#define RW007_CS_PIN 90
-#define RW007_BOOT0_PIN 29
-#define RW007_BOOT1_PIN 90
-#define RW007_INT_BUSY_PIN 107
-#define RW007_RST_PIN 111
 
 /* CYW43012 WiFi */
 
@@ -497,7 +487,6 @@
 #define BSP_USING_FAL
 #define BSP_USING_BOOTLOADER
 #define BSP_USING_EASYFLASH
-#define BSP_USING_RW007_WLAN
 #define BSP_USING_AHT21
 #define BSP_USING_ICM20608
 #define BSP_USING_CAN

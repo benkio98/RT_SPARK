@@ -232,5 +232,5 @@ static void msh_mq_publish(int argc, char *argv[])
     mq_publish(send_buff);  //发布消息给主题"test"
 }
 /* 导出到 msh 命令列表中 */
-MSH_CMD_EXPORT(msh_mq_publish, publish messege by msh);
+// MSH_CMD_EXPORT(msh_mq_publish, publish messege by msh);
 
