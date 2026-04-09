@@ -262,10 +262,136 @@ msh />
 
 ## 对比两份运行日志，导致 OTA 升级失败的关键差异确实在于初始化的外设数量不同。
 
-问题根本原因：
-出问题的 App 中初始化了 RW007 WiFi 模块。在目前的硬件配置中，RW007 (spi2) 与 SPI Flash (spi20) 共享了同一个 SPI 总线 (SPI2)。
-当 App 运行 ymodem_ota 下载完固件后，执行了特殊的“软重启（Soft Reset）”。此时 STM32 芯片内部被复位，但是外部接的 RW007 WiFi 芯片并没有被硬件复位，其 SPI 引脚（特别是 MISO 或者 CS 引脚）可能依然保持在使用状态并占用总线。
-这导致 Bootloader 启动后，企图通过同一根 SPI 总线读取 Flash 时产生了冲突（读不到正确的 SFDP 数据），从而报 spi flash device is initialize fail。
+分析非常准确！对比两份运行日志，导致 OTA 升级失败的关键差异确实在于**初始化的外设数量不同**。
+
+**问题根本原因：**
+出问题的 App 中初始化了 **RW007 WiFi 模块**。在目前的硬件配置中，RW007 (`spi2`) 与 SPI Flash (`spi20`) **共享了同一个 SPI 总线 (SPI2)**。
+当 App 运行 `ymodem_ota` 下载完固件后，执行了特殊的“软重启（Soft Reset）”。此时 STM32 芯片内部被复位，但是外部接的 RW007 WiFi 芯片并没有被硬件复位，其 SPI 引脚（特别是 MISO 或者 CS 引脚）可能依然保持在使用状态并占用总线。
+这导致 Bootloader 启动后，企图通过同一根 SPI 总线读取 Flash 时产生了冲突（读不到正确的 SFDP 数据），从而报 `spi flash device is initialize fail`。
+
+**解决办法：**
+为了验证并解决这个问题（同时向你给出的只有基础组件的“shell 例程”看齐），我们可以通过修改 rtconfig.h，以最小的代码改动**临时屏蔽 RW007 WLAN 相关的宏定义**。取消它的初始化，让 SPI2 总线完全留给 Flash 使用，这样重启后就不会因为引脚状态残留导致 Bootloader 卡死。
+
+### [rtconfig.h](file:///d%3A/GithubRepo/RT_SPARK/rtconfig.h)
+
+注释掉与 RW007 WiFi 模块相关的宏定义，防止其开机初始化并占用 SPI 总线。
+
+````cpp
+// ...existing code...
+/* Wiced WiFi */
+
+/* end of Wiced WiFi */
+//#define PKG_USING_RW007
+//#define PKG_USING_RW007_V210
+//#define RW007_USING_STM32_DRIVERS
+//#define RW007_SPI_MAX_HZ 30000000
+//#define RW007_SPI_BUS_NAME "spi2"
+//#define RW007_CS_PIN 90
+//#define RW007_BOOT0_PIN 29
+//#define RW007_BOOT1_PIN 90
+//#define RW007_INT_BUSY_PIN 107
+//#define RW007_RST_PIN 111
+
+/* CYW43012 WiFi */
+// ...existing code...
+#define BSP_USING_EASYFLASH
+//#define BSP_USING_RW007_WLAN
+#define BSP_USING_AHT21
+// ...existing code...
+````
+
+**下一步建议：**
+重新编译并烧录 App1，此时启动日志将不再有 RW007 的信息。再次尝试 `ymodem_ota` 升级，应该就可以顺利跨过 Bootloader 的读取错误，成功重启搬运固件了。如果在后续项目中必须同时使用 WIFI 和 OTA，你可以在发出重启指令的前一刻（例如 OTA 结束时），手动拉低一次 `RW007_RST_PIN` 引脚强行硬件复位 WiFi 芯片释放 SPI 总线即可。
+
+Made changes.
+
+``` cpp
+//#define RW007_SPI_BUS_NAME "spi2"
+//#define RW007_CS_PIN 90
+//#define RW007_BOOT0_PIN 29
+//#define RW007_BOOT1_PIN 90
+//#define RW007_INT_BUSY_PIN 107
+//#define RW007_RST_PIN 111
+
+```
+http_ota http://172.16.29.241:80/rtthread.rbl
+
+wifi join Bioeasy-Office Bio@0808
+笔记本电脑连接 wifi 后的 IP 地址是172.16.29.241
+开发板打印日志是msh />04-08 14:50:02 I/WLAN.lwip: Got IP address : 172.16.28.145
+
+
+http://172.16.29.241/rtthread.rbl
+
+
+msh />netstat
+Active PCB states:
+Listen PCB states:
+TIME-WAIT PCB states:
+Active UDP PCB states:
+msh />
+msh />ifconfig
+network interface device: w0 (Default)
+MTU: 1500
+MAC: fc 58 4a fa 9b 81 
+FLAGS: UP LINK_UP INTERNET_DOWN DHCP_DISABLE ETHARP BROADCAST IGMP
+ip address: 172.16.28.30
+gw address: 172.16.28.1
+net mask  : 255.255.254.0
+dns server #0: 0.0.0.0
+dns server #1: 0.0.0.0
+
+network interface device: w1
+MTU: 1500
+MAC: fc 58 4a fa 9b 80 
+FLAGS: UP LINK_DOWN INTERNET_DOWN DHCP_DISABLE ETHARP BROADCAST IGMP
+ip address: 172.16.28.30
+gw address: 172.16.28.1
+net mask  : 255.255.254.0
+dns server #0: 0.0.0.0
+dns server #1: 0.0.0.0
+msh />ping 172.16.28.1
+60 bytes from 172.16.28.1 icmp_seq=0 ttl=255 time=13 ms
+60 bytes from 172.16.28.1 icmp_seq=1 ttl=255 time=10 ms
+60 bytes from 172.16.28.1 icmp_seq=2 ttl=255 time=7 ms
+60 bytes from 172.16.28.1 icmp_seq=3 ttl=255 time=56 ms
+
+msh />wifi scan
+04-08 16:47:57 I/iot_wifi_manager: disconnect from the network!
+             SSID                      MAC            security    rssi chn Mbps
+------------------------------- -----------------  -------------- ---- --- ----
+C539                            50:d2:f5:2e:be:33  WPA2_MIXED_PSK -27    6    0
+MIFI-D866                       5c:a0:01:58:d8:66  WPA2_AES_PSK   -42    6    0
+B401                            9e:47:82:99:23:97  WPA2_AES_PSK   -55   11    0
+Bioeasy-Office                  ac:ce:92:ff:56:88  WPA2_AES_PSK   -76   11    0
+Bioeasy-Client                  ac:ce:92:ff:56:89  WPA2_AES_PSK   -76   11    0
+Bioeasy-Client                  ac:ce:92:ff:f0:69  WPA2_AES_PSK   -80    1    0
+msh />
 
 
 
+msh />wifi status
+Wi-Fi STA Info
+SSID : Bioeasy-Office
+MAC Addr: 00:00:00:00:00:00
+Channel: -1
+DataRate: 0Mbps
+RSSI: -63
+wifi ap not start!
+Auto Connect status:Enable!
+msh />
+这段日志中wifi status没有显示真实的 MAC 地址和 Channel，请你检查代码解决问题
+
+
+
+
+连接 wifi dududu
+pad wifi ip address: 192.168.0.35:80
+255.255.255.0
+dns: 192.168.0.196
+
+board ip address: 192.168.0.30
+255.255.255.0
+dns:192.168.0.1
+
+http_ota http://192.168.0.35:80/rtthread.rbl

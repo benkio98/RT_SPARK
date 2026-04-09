@@ -157,10 +157,10 @@ static void wifi_app_entry(void *parameter)
         rt_wlan_connect(WLAN_SSID, WLAN_PASSWORD);
     }
 
-    // rt_thread_mdelay(5000);
+    rt_thread_mdelay(500);
 
-    // LOG_D("ready to disconect from ap ...");
-    // rt_wlan_disconnect();
+    LOG_D("ready to disconect from ap ...");
+    rt_wlan_disconnect();
 
     /* 自动连接 */
     LOG_D("start to autoconnect ...");
@@ -176,7 +176,7 @@ int iot_wifi_manager_init(void)
     }
     return 0;
 }
-// INIT_APP_EXPORT(iot_wifi_manager_init);
+INIT_APP_EXPORT(iot_wifi_manager_init);
 
 static void print_wlan_information(struct rt_wlan_info *info,int index)
 {

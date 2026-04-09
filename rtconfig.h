@@ -96,6 +96,7 @@
 #define RT_DFS_ELM_MUTEX_TIMEOUT 3000
 /* end of elm-chan's FatFs, Generic FAT Filesystem Module */
 #define RT_USING_DFS_DEVFS
+#define RT_USING_DFS_ROMFS
 #define RT_USING_FAL
 #define FAL_DEBUG_CONFIG
 #define FAL_DEBUG 1
@@ -117,6 +118,7 @@
 #define RT_CAN_USING_HDR
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
+#define RT_USING_PHY
 #define RT_USING_PIN
 #define RT_USING_PWM
 #define RT_USING_PM
@@ -208,14 +210,11 @@
 #define RT_LWIP_IGMP
 #define RT_LWIP_ICMP
 #define RT_LWIP_DNS
-#define RT_LWIP_DHCP
-#define IP_SOF_BROADCAST 1
-#define IP_SOF_BROADCAST_RECV 1
 
 /* Static IPv4 Address */
 
-#define RT_LWIP_IPADDR "192.168.1.30"
-#define RT_LWIP_GWADDR "192.168.1.1"
+#define RT_LWIP_IPADDR "192.168.0.30"
+#define RT_LWIP_GWADDR "192.168.0.1"
 #define RT_LWIP_MSKADDR "255.255.255.0"
 /* end of Static IPv4 Address */
 #define RT_LWIP_UDP
@@ -292,6 +291,16 @@
 /* Wiced WiFi */
 
 /* end of Wiced WiFi */
+#define PKG_USING_RW007
+#define PKG_USING_RW007_LATEST_VERSION
+#define RW007_USING_STM32_DRIVERS
+#define RW007_SPI_MAX_HZ 30000000
+#define RW007_SPI_BUS_NAME "spi2"
+#define RW007_CS_PIN 90
+#define RW007_BOOT0_PIN 29
+#define RW007_BOOT1_PIN 90
+#define RW007_INT_BUSY_PIN 107
+#define RW007_RST_PIN 111
 
 /* CYW43012 WiFi */
 
@@ -305,12 +314,31 @@
 
 /* end of CYW43439 WiFi */
 /* end of Wi-Fi */
+#define PKG_USING_NETUTILS
+#define PKG_NETUTILS_TFTP
+#define PKG_NETUTILS_IPERF
+#define IPERF_THREAD_STACK_SIZE 2048
+#define PKG_NETUTILS_NETIO
+#define PKG_NETUTILS_NTP
+#define NTP_USING_AUTO_SYNC
+#define NTP_AUTO_SYNC_FIRST_DELAY 30
+#define NTP_AUTO_SYNC_PERIOD 3600
+#define NETUTILS_NTP_HOSTNAME "cn.ntp.org.cn"
+#define NETUTILS_NTP_HOSTNAME2 "ntp.rt-thread.org"
+#define NETUTILS_NTP_HOSTNAME3 "edu.ntp.org.cn"
+#define PKG_NETUTILS_TELNET
+#define PKG_NETUTILS_TCPDUMP
+#define PKG_NETUTILS_TCPDUMP_DBG
+#define PKG_USING_NETUTILS_V133
+#define PKG_NETUTILS_VER_NUM 0x10303
 
 /* IoT Cloud */
 
 /* end of IoT Cloud */
 #define PKG_USING_OTA_DOWNLOADER
 #define OTA_DOWNLOADER_DEBUG
+#define PKG_USING_HTTP_OTA
+#define PKG_HTTP_OTA_URL "http://xxx/xxx/rtthread.rbl"
 #define PKG_USING_YMODEM_OTA
 #define PKG_USING_OTA_DOWNLOADER_V100
 /* end of IoT - internet of things */
@@ -420,6 +448,8 @@
 /* entertainment: terminal games and other interesting software packages */
 
 /* end of entertainment: terminal games and other interesting software packages */
+#define PKG_USING_OPTPARSE
+#define PKG_USING_OPTPARSE_LATEST_VERSION
 /* end of miscellaneous packages */
 
 /* Arduino libraries */
@@ -484,9 +514,12 @@
 #define BSP_USING_LED_MATRIX
 #define BSP_USING_ONBOARD_LED_MATRIX
 #define BSP_USING_SPI_FLASH
+#define BSP_USING_FS
+#define BSP_USING_FLASH_FATFS
 #define BSP_USING_FAL
 #define BSP_USING_BOOTLOADER
 #define BSP_USING_EASYFLASH
+#define BSP_USING_RW007_WLAN
 #define BSP_USING_AHT21
 #define BSP_USING_ICM20608
 #define BSP_USING_CAN

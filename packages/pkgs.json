@@ -10,6 +10,16 @@
   "name": "WEBCLIENT"
  }, 
  {
+  "path": "/packages/iot/WiFi/rw007", 
+  "ver": "latest", 
+  "name": "RW007"
+ }, 
+ {
+  "path": "/packages/iot/netutils", 
+  "ver": "v1.3.3", 
+  "name": "NETUTILS"
+ }, 
+ {
   "path": "/packages/iot/ota_downloader", 
   "ver": "v1.0.0", 
   "name": "OTA_DOWNLOADER"
@@ -28,5 +38,10 @@
   "path": "/packages/peripherals/sensors/icm20608", 
   "ver": "latest", 
   "name": "ICM20608"
+ }, 
+ {
+  "path": "/packages/misc/optparse", 
+  "ver": "latest", 
+  "name": "OPTPARSE"
  }
 ]

@@ -61,9 +61,9 @@ static void http_client_app_entry(void *parameter)
     }
 
     /* HTTP GET 请求发送 */
-    webclient_get_smpl(HTTP_GET_URL);
+    // webclient_get_smpl(HTTP_GET_URL);
     /* HTTP POST 请求发送 */
-    webclient_post_smpl(HTTP_POST_URL,post_data,rt_strlen(post_data));
+    // webclient_post_smpl(HTTP_POST_URL,post_data,rt_strlen(post_data));
 }
 
 int iot_http_client_init(void)
@@ -76,7 +76,7 @@ int iot_http_client_init(void)
     }
     return 0;
 }
-// INIT_APP_EXPORT(iot_http_client_init);
+INIT_APP_EXPORT(iot_http_client_init);
 
 /**
  * The callback of network ready event

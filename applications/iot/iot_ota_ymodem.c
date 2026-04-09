@@ -67,4 +67,4 @@ int iot_ota_init(void)
     #endif
     return 0;
 }
-INIT_APP_EXPORT(iot_ota_init);
+// INIT_APP_EXPORT(iot_ota_init);

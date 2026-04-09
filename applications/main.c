@@ -30,6 +30,7 @@ int main(void)
 #include <rtthread.h>
 #include <fal.h>
 #include <dfs_fs.h>
+#include <rtdevice.h>
 
 #define LOG_TAG "main"
 #define LOG_LVL         LOG_LVL_DBG
@@ -37,7 +38,26 @@ int main(void)
 
 #define FS_PARTITION_NAME "filesystem"
 
-#define APP_VERSION "2.0.0"
+#define APP_VERSION "1.0.0"
+
+/* 重写系统复位函数：拦截重启指令，先硬复位 WIFI 芯片释放 SPI 总线 */
+void rt_hw_cpu_reset(void)
+{
+    LOG_I("Resetting RW007 to release SPI bus before system restart...");
+    
+    /* 将 Wlan 的 CS (Pin 90) 拉高取消选中，RST (Pin 111) 拉低进行硬复位 */
+    rt_pin_mode(RW007_CS_PIN, PIN_MODE_OUTPUT);
+    rt_pin_write(RW007_CS_PIN, PIN_HIGH);
+    rt_pin_mode(RW007_RST_PIN, PIN_MODE_OUTPUT);
+    rt_pin_write(RW007_RST_PIN, PIN_LOW);
+    
+    rt_thread_mdelay(100);
+    
+    /* 触发 Cortex-M 内核软复位 (相当于执行 NVIC_SystemReset) */
+    *((volatile uint32_t *)0xE000ED0C) = (0x5FA << 16) | (1 << 2);
+    while(1);
+}
+
 /**
  * Function    ota_app_vtor_reconfig
  * Description Set Vector Table base location to the start addr of app(RT_APP_PART_ADDR).
@@ -73,7 +93,7 @@ int main(void)
     }
 
     /* 挂载 spi flash 中名为 "filesystem" 的分区上的文件系统 */
-    if (dfs_mount(flash_dev->parent.name, "/", "elm", 0, 0) == 0)
+    if (dfs_mount(flash_dev->parent.name, "/fal", "elm", 0, 0) == 0)
     {
         LOG_I("Filesystem initialized!");
     }
